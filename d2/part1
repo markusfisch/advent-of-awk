@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+awk -F '[ :-]' '{occ = gsub($3, "", $5); if (occ >= $1 && occ <= $2) ++valid} END {print valid}' "$1"

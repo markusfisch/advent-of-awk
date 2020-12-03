@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+{
+	awk -v FS= '{if ($(1 + x % NF) == "#") ++trees; x += 1} END {print trees}' "$1"
+	awk -v FS= '{if ($(1 + x % NF) == "#") ++trees; x += 3} END {print trees}' "$1"
+	awk -v FS= '{if ($(1 + x % NF) == "#") ++trees; x += 5} END {print trees}' "$1"
+	awk -v FS= '{if ($(1 + x % NF) == "#") ++trees; x += 7} END {print trees}' "$1"
+	awk -v FS= '{if (NR % 2 == 0) next; if ($(1 + x % NF) == "#") ++trees; x += 1} END {print trees}' "$1"
+} | awk 'BEGIN {sum = 1} {sum *= $1} END {print sum}'

@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+awk 'NR==FNR{arr[NR] = $1; next} END {for (a in arr) for (b in arr) if (arr[a] + arr[b] == 2020) { print arr[a]*arr[b]; exit }}' "$1"

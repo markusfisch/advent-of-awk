@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+for D in *
+do
+	[ -d "$D" ] && (
+		cd "$D" || exit 1
+		echo "========== $D =========="
+		for F in sample input
+		do
+			[ -r "$F" ] || continue
+			echo ">> $F"
+			for X in part*
+			do
+				echo -n "$X: "
+				"./$X" "$F" || exit 1
+			done
+		done
+		echo
+	)
+done
