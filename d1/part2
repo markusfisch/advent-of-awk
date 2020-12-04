@@ -1,2 +1,17 @@
-#!/usr/bin/env bash
-awk 'NR==FNR{arr[NR] = $1; next} END {for (a in arr) for (b in arr) for (c in arr) if (arr[a] + arr[b] + arr[c] == 2020) { print arr[a]*arr[b]*arr[c]; exit }}' "$1"
+#!/usr/bin/env awk -f
+NR==FNR {
+	arr[NR] = $1
+	next
+}
+END {
+	for (a in arr) {
+		for (b in arr) {
+			for (c in arr) {
+				if (arr[a] + arr[b] + arr[c] == 2020) {
+					print arr[a]*arr[b]*arr[c]
+					exit
+				}
+			}
+		}
+	}
+}

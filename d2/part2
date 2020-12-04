@@ -1,2 +1,13 @@
-#!/usr/bin/env bash
-awk -F '[ :-]' '{s = (substr($5, $1, 1) substr($5, $2, 1)); if (gsub($3, "", s) == 1) ++valid} END {print valid}' "$1"
+#!/usr/bin/env awk -f
+BEGIN {
+	FS="[ :-]"
+}
+{
+	s = (substr($5, $1, 1) substr($5, $2, 1))
+	if (gsub($3, "", s) == 1) {
+		++valid
+	}
+}
+END {
+	print valid
+}
