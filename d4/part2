@@ -1,0 +1,54 @@
+#!/usr/bin/env awk -f
+BEGIN {
+	RS=""
+	FS="[\n ]"
+	split("byr|iyr|eyr|hgt|hcl|ecl|pid", req, "|")
+}
+function check_height(s) {
+	if (gsub(/in$/, "", s) > 0) {
+		return s >= 59 && s <= 76
+	}
+	if (gsub(/cm$/, "", s) > 0) {
+		return s >= 150 && s <= 193
+	}
+	return 0
+}
+{
+	delete items
+	items["byr"] = 0
+	items["iyr"] = 0
+	items["eyr"] = 0
+	items["hgt"] = 0
+	items["hcl"] = 0
+	items["ecl"] = 0
+	items["pid"] = 0
+	invalid = 0
+	for (i = 1; i <= NF; ++i) {
+		split($i, a, /:/)
+		key = a[1]
+		value = a[2]
+		++items[key]
+		if ((key == "byr" && (value < 1920 || value > 2002)) ||
+			(key == "iyr" && (value < 2010 || value > 2020)) ||
+			(key == "eyr" && (value < 2020 || value > 2030)) ||
+			(key == "hgt" && check_height(value) == 0) ||
+			(key == "hcl" && (value !~ /^#[0-9a-f]{6}$/)) ||
+			(key == "ecl" && (value !~ /amb|blu|brn|gry|grn|hzl|oth/)) ||
+			(key == "pid" && (value !~ /^[0-9]{9}$/))) {
+			invalid = 1
+			break
+		}
+	}
+	for (i in req) {
+		if (items[req[i]] != 1) {
+			invalid = 1
+			break
+		}
+	}
+	if (invalid == 0) {
+		++valid
+	}
+}
+END {
+	print valid
+}
