@@ -4,7 +4,7 @@ report() {
 	do
 		[ -d "$D" ] && (
 			cd "$D" || exit $?
-			echo "-- $D. December 2020 -------------------"
+			echo "## Day ${D#0}"
 			for X in part*
 			do
 				echo -n "$X: "
