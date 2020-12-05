@@ -3,16 +3,11 @@ for D in *
 do
 	[ -d "$D" ] && (
 		cd "$D" || exit 1
-		echo "========== $D =========="
-		for F in sample input
+		echo "-- $D. December 2020 -------------------"
+		for X in part*
 		do
-			[ -r "$F" ] || continue
-			echo ">> $F"
-			for X in part*
-			do
-				echo -n "$X: "
-				"./$X" "$F" || exit 1
-			done
+			echo -n "$X: "
+			"./$X" input || exit 1
 		done
 		echo
 	)
