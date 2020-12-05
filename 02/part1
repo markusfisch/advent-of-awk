@@ -1,6 +1,6 @@
 #!/usr/bin/env awk -f
 BEGIN {
-	FS="[ :-]"
+	FS = "[ :-]"
 }
 {
 	occ = gsub($3, "", $5)

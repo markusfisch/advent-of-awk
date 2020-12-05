@@ -1,7 +1,7 @@
 #!/usr/bin/env awk -f
 BEGIN {
-	RS=""
-	FS="[\n ]"
+	RS = ""
+	FS = "[\n ]"
 	split("byr|iyr|eyr|hgt|hcl|ecl|pid", req, "|")
 }
 {

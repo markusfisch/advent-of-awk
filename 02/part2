@@ -1,6 +1,6 @@
 #!/usr/bin/env awk -f
 BEGIN {
-	FS="[ :-]"
+	FS = "[ :-]"
 }
 {
 	s = (substr($5, $1, 1) substr($5, $2, 1))
