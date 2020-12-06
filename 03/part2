@@ -11,14 +11,12 @@ END {
 		x = 0
 		line = 0
 		while ((getline < FILENAME) > 0) {
-			++line
-			if (down > 1 && line % down == 0) {
-				continue
+			if (line++ % down == 0) {
+				if ($(1 + x % NF) == "#") {
+					++trees
+				}
+				x += right
 			}
-			if ($(1 + x % NF) == "#") {
-				++trees
-			}
-			x += right
 		}
 		close FILENAME
 		sum *= trees
