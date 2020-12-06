@@ -1,0 +1,17 @@
+#!/usr/bin/env awk -f
+BEGIN {
+	RS = ""
+	FS = ""
+}
+{
+	delete a
+	for (i = 1; i <= NF; ++i) {
+		if ($i != "\n") {
+			a[$i] = 1
+		}
+	}
+	count += length(a)
+}
+END {
+	print count
+}
