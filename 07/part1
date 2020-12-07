@@ -5,7 +5,7 @@ BEGIN {
 {
 	rules[$1] = $2
 }
-function find(needle) {
+function find(needle, rule) {
 	for (rule in rules) {
 		if (index(rules[rule], needle) > 0) {
 			++bags[rule]
@@ -15,5 +15,7 @@ function find(needle) {
 }
 END {
 	find("shiny gold")
-	print length(bags)
+	i = 0
+	for (bag in bags) ++i
+	print i
 }

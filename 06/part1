@@ -10,7 +10,9 @@ BEGIN {
 			a[$i] = 1
 		}
 	}
-	count += length(a)
+	i = 0
+	for (arg in a) ++i
+	count += i
 }
 END {
 	print count

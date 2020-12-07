@@ -18,9 +18,9 @@ END {
 				x += right
 			}
 		}
-		close FILENAME
+		close(FILENAME)
 		sum *= trees
 	}
-	print sum
+	printf "%0.f\n", sum
 	exit
 }
