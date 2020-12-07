@@ -1,0 +1,19 @@
+#!/usr/bin/env awk -f
+BEGIN {
+	FS="( bags contain |[.])"
+}
+{
+	rules[$1] = $2
+}
+function find(needle) {
+	for (rule in rules) {
+		if (index(rules[rule], needle) > 0) {
+			++bags[rule]
+			find(rule)
+		}
+	}
+}
+END {
+	find("shiny gold")
+	print length(bags)
+}

@@ -1,0 +1,20 @@
+#!/usr/bin/env awk -f
+BEGIN {
+	FS="( bags contain |[.])"
+}
+{
+	rules[$1] = $2
+}
+function find(needle, i, parts, comp, bags) {
+	split(rules[needle], parts, ",")
+	bags = 0
+	for (i in parts) {
+		if (split(parts[i], comp, " ") > 3 && comp[1] > 0) {
+			bags += comp[1] + comp[1]*find(comp[2] " " comp[3])
+		}
+	}
+	return bags
+}
+END {
+	print find("shiny gold")
+}
