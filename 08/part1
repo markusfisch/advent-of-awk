@@ -1,0 +1,25 @@
+#!/usr/bin/env -S awk -f
+{
+	cmds[NR] = $1
+	args[NR] = $2
+	visited[NR] = 0
+}
+END {
+	for (i in cmds) ++len
+	i = 1
+	do {
+		if (visited[i] > 0) {
+			break
+		}
+		visited[i] = 1
+		cmd = cmds[i]
+		if (cmd == "acc") {
+			value += args[i]
+		} else if (cmd == "jmp") {
+			i += args[i]
+			continue
+		}
+		++i
+	} while (i <= len)
+	print value
+}

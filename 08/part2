@@ -1,0 +1,43 @@
+#!/usr/bin/env -S awk -f
+{
+	cmds[NR] = $1
+	args[NR] = $2
+}
+function run() {
+	for (i = 1; i <= len; ++i) {
+		visited[i] = 0
+	}
+	value = 0
+	i = 1
+	do {
+		if (visited[i] > 0) {
+			return 1
+		}
+		visited[i] = 1
+		cmd = cmds[i]
+		if (cmd == "acc") {
+			value += args[i]
+		} else if (cmd == "jmp") {
+			i += args[i]
+			continue
+		}
+		++i
+	} while (i <= len)
+	return 0
+}
+END {
+	for (i in cmds) ++len
+	changed = 0
+	do {
+		for (i = 1; i <= len; ++i) {
+			if (i == changed) {
+				cmds[i] = "jmp"
+			} else if (i > changed && cmds[i] == "jmp") {
+				cmds[i] = "nop"
+				changed = i
+				break
+			}
+		}
+	} while (run() > 0)
+	print value
+}
