@@ -3,7 +3,7 @@
 	cmds[NR] = $1
 	args[NR] = $2
 }
-function run() {
+function run(i, visited, cmd) {
 	for (i = 1; i <= len; ++i) {
 		visited[i] = 0
 	}
@@ -13,7 +13,7 @@ function run() {
 		if (visited[i] > 0) {
 			return 1
 		}
-		visited[i] = 1
+		++visited[i]
 		cmd = cmds[i]
 		if (cmd == "acc") {
 			value += args[i]
@@ -29,10 +29,11 @@ END {
 	for (i in cmds) ++len
 	changed = 0
 	do {
-		for (i = 1; i <= len; ++i) {
-			if (i == changed) {
-				cmds[i] = "jmp"
-			} else if (i > changed && cmds[i] == "jmp") {
+		if (changed > 0) {
+			cmds[changed] = "jmp"
+		}
+		for (i = changed + 1; i <= len; ++i) {
+			if (cmds[i] == "jmp") {
 				cmds[i] = "nop"
 				changed = i
 				break
