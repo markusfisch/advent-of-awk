@@ -31,14 +31,13 @@ function find(target, len, min, max, a, b, base, n) {
 }
 {
 	if (NR > plen) {
-		if (check($1, NR - 1) == 0) {
+		last = NR - 1
+		delete preamble[last - plen]
+		if (check($1, last) == 0) {
 			print find($1, NR)
 			exit
 		}
 	}
 	preamble[NR] = $1
 	list[NR] = $1
-	if (NR > plen) {
-		delete preamble[NR - plen]
-	}
 }
