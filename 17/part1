@@ -1,0 +1,90 @@
+#!/usr/bin/awk -f
+BEGIN {
+	FS = ""
+}
+{
+	nx = NF
+	ny = NR
+	nz = 1
+	for (x = 1; x <= NF; ++x) {
+		cube[x, NR, 1] = $x
+	}
+}
+function get(x, y, z) {
+	return x < 1 || x > nx || \
+		y < 1 || y > ny || \
+		z < 1 || z > nz || \
+		view[x, y, z] != "#" ? 0 : 1
+}
+function count_neighbors(x, y, z, s, t, u, active) {
+	active = 0
+	for (u = -1; u <= 1; ++u) {
+		for (t = -1; t <= 1; ++t) {
+			for (s = -1; s <= 1; ++s) {
+				active += s == 0 && t == 0 && u == 0 \
+					? 0 \
+					: get(x + s, y + t, z + u)
+			}
+		}
+	}
+	return active
+}
+function expand(x, y, z) {
+	nz += 2
+	ny += 2
+	nx += 2
+	for (z = 1; z <= nz; ++z) {
+		for (y = 1; y <= ny; ++y) {
+			for (x = 1; x <= nx; ++x) {
+				view[x, y, z] = \
+						x == 1 || y == 1 || z == 1 || \
+						x == nx || y == ny || z == nz \
+					? "." \
+					: cube[x - 1, y - 1, z - 1]
+			}
+		}
+	}
+	for (z = 1; z <= nz; ++z) {
+		for (y = 1; y <= ny; ++y) {
+			for (x = 1; x <= nx; ++x) {
+				cube[x, y, z] = view[x, y, z]
+			}
+		}
+	}
+}
+function conway_cubes(x, y, z, cell, active) {
+	expand()
+	for (z = 1; z <= nz; ++z) {
+		for (y = 1; y <= ny; ++y) {
+			for (x = 1; x <= nx; ++x) {
+				active = count_neighbors(x, y, z)
+				cell = view[x, y, z]
+				if (cell == "#" && (active < 2 || active > 3)) {
+					cube[x, y, z] = "."
+				} else if (cell == "." && active == 3) {
+					cube[x, y, z] = "#"
+				}
+			}
+		}
+	}
+}
+function count_active(x, y, z, cell, active) {
+	active = 0
+	for (z = 1; z <= nz; ++z) {
+		for (y = 1; y <= ny; ++y) {
+			for (x = 1; x <= nx; ++x) {
+				cell = cube[x, y, z]
+				if (cell == "#") ++active
+			}
+		}
+	}
+	return active
+}
+END {
+	count_active()
+	for (i = 1; i <= 6; ++i) {
+		conway_cubes()
+		active = count_active()
+	}
+	print active
+}

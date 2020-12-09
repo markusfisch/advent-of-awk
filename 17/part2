@@ -1,0 +1,103 @@
+#!/usr/bin/awk -f
+BEGIN {
+	FS = ""
+}
+{
+	nx = NF
+	ny = NR
+	nz = 1
+	nw = 1
+	for (x = 1; x <= NF; ++x) {
+		cube[x, NR, 1, 1] = $x
+	}
+}
+function get(x, y, z, w) {
+	return x < 1 || x > nx || \
+		y < 1 || y > ny || \
+		z < 1 || z > nz || \
+		w < 1 || w > nw || \
+		view[x, y, z, w] != "#" ? 0 : 1
+}
+function count_neighbors(x, y, z, w, s, t, u, v, active) {
+	active = 0
+	for (v = -1; v <= 1; ++v) {
+		for (u = -1; u <= 1; ++u) {
+			for (t = -1; t <= 1; ++t) {
+				for (s = -1; s <= 1; ++s) {
+					active += s == 0 && t == 0 && u == 0 && v == 0 \
+						? 0 \
+						: get(x + s, y + t, z + u, w + v)
+				}
+			}
+		}
+	}
+	return active
+}
+function expand(x, y, z, w) {
+	nw += 2
+	nz += 2
+	ny += 2
+	nx += 2
+	for (w = 1; w <= nw; ++w) {
+		for (z = 1; z <= nz; ++z) {
+			for (y = 1; y <= ny; ++y) {
+				for (x = 1; x <= nx; ++x) {
+					view[x, y, z, w] = \
+							x == 1 || y == 1 || z == 1 || w == 1 || \
+							x == nx || y == ny || z == nz || w == nw \
+						? "." \
+						: cube[x - 1, y - 1, z - 1, w - 1]
+				}
+			}
+		}
+	}
+	for (w = 1; w <= nw; ++w) {
+		for (z = 1; z <= nz; ++z) {
+			for (y = 1; y <= ny; ++y) {
+				for (x = 1; x <= nx; ++x) {
+					cube[x, y, z, w] = view[x, y, z, w]
+				}
+			}
+		}
+	}
+}
+function conway_cubes(x, y, z, w, cell, active) {
+	expand()
+	for (w = 1; w <= nw; ++w) {
+		for (z = 1; z <= nz; ++z) {
+			for (y = 1; y <= ny; ++y) {
+				for (x = 1; x <= nx; ++x) {
+					active = count_neighbors(x, y, z, w)
+					cell = view[x, y, z, w]
+					if (cell == "#" && (active < 2 || active > 3)) {
+						cube[x, y, z, w] = "."
+					} else if (cell == "." && active == 3) {
+						cube[x, y, z, w] = "#"
+					}
+				}
+			}
+		}
+	}
+}
+function count_active(x, y, z, w, cell, active) {
+	active = 0
+	for (w = 1; w <= nw; ++w) {
+		for (z = 1; z <= nz; ++z) {
+			for (y = 1; y <= ny; ++y) {
+				for (x = 1; x <= nx; ++x) {
+					cell = cube[x, y, z, w]
+					if (cell == "#") ++active
+				}
+			}
+		}
+	}
+	return active
+}
+END {
+	count_active()
+	for (i = 1; i <= 6; ++i) {
+		conway_cubes()
+		active = count_active()
+	}
+	print active
+}
