@@ -2,10 +2,11 @@
 BEGIN {
 	plen = 25
 }
-function check(n, a, b) {
-	for (a in preamble) {
-		for (b in preamble) {
-			if (a != b && n == preamble[a] + preamble[b]) {
+function check(n, nr, a, b, base) {
+	for (a = nr - plen; a <= nr; ++a) {
+		base = preamble[a]
+		for (b = a + 1; b <= nr; ++b) {
+			if (base + preamble[b] == n) {
 				return 1
 			}
 		}
@@ -14,7 +15,7 @@ function check(n, a, b) {
 }
 {
 	if (NR > plen) {
-		if (check($1) == 0) {
+		if (check($1, NR - 1) == 0) {
 			print $1
 			exit
 		}
