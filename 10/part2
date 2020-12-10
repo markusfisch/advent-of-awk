@@ -20,5 +20,5 @@ function count(n, c, i) {
 END {
 	adapters[0] = 0
 	map[0] = 1
-	print count(max)
+	printf "%.0f\n", count(max)
 }
