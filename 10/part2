@@ -1,0 +1,24 @@
+#!/usr/bin/env -S awk -f
+{
+	adapters[$1] = $1
+	if ($1 > max) max = $1
+}
+function count(n, c, i) {
+	if (n < 0 || adapters[n] == "") {
+		return 0
+	}
+	c = map[n]
+	if (c == "") {
+		c = 0
+		for (i = 1; i < 4; ++i) {
+			c += count(n - i)
+		}
+		map[n] = c
+	}
+	return c
+}
+END {
+	adapters[0] = 0
+	map[0] = 1
+	print count(max)
+}

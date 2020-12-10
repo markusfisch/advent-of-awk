@@ -1,0 +1,22 @@
+#!/usr/bin/env -S awk -f
+{
+	adapters[$1] = $1
+	if ($1 > max) max = $1
+}
+END {
+	for (i = 1; i <= max; ++i) {
+		jolts = adapters[i]
+		if (jolts < 1) continue
+		diff = jolts - previous
+		previous = jolts
+		if (diff == 1) {
+			++ones
+		} else if (diff == 3) {
+			++threes
+		} else {
+			exit
+		}
+	}
+	++threes
+	print ones * threes
+}
