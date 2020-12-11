@@ -1,0 +1,76 @@
+#!/usr/bin/env -S awk -f
+BEGIN {
+	FS = ""
+}
+{
+	if (width < NF) width = NF
+	height = NR
+	for (x = 1; x <= NF; ++x) {
+		floor[x, NR] = $x
+	}
+}
+function get(s, t) {
+	if (s > 0 && s <= width && t > 0 && t <= height) return view[s, t]
+}
+function find(s, t, a, b, c) {
+	while (1) {
+		s += a
+		t += b
+		c = get(s, t)
+		if (c == "L") return 0
+		if (c == "#") return 1
+		if (c == "") break
+	}
+	return 0
+}
+function copy(x, y) {
+	for (y = 1; y <= height; ++y) {
+		for (x = 1; x <= width; ++x) {
+			view[x, y] = floor[x, y]
+		}
+	}
+}
+function game_of_seats(x, y, cell, occupied) {
+	copy()
+	for (y = 1; y <= height; ++y) {
+		for (x = 1; x <= width; ++x) {
+			occupied = \
+				find(x, y, 0, -1) + \
+				find(x, y, 1, -1) + \
+				find(x, y, 1, 0) + \
+				find(x, y, 1, 1) + \
+				find(x, y, 0, 1) + \
+				find(x, y, -1, 1) + \
+				find(x, y, -1, 0) + \
+				find(x, y, -1, -1)
+			cell = view[x, y]
+			if (cell == "L" && occupied < 1) {
+				floor[x, y] = "#"
+			} else if (cell == "#" && occupied > 4) {
+				floor[x, y] = "L"
+			}
+		}
+	}
+}
+function count(what, x, y, cell, occupied) {
+	occupied = 0
+	for (y = 1; y <= height; ++y) {
+		for (x = 1; x <= width; ++x) {
+			cell = what[x, y]
+			if (cell == "#") ++occupied
+		}
+	}
+	return occupied
+}
+END {
+	last = 0
+	while (1) {
+		game_of_seats()
+		occupied = count(floor)
+		if (occupied == last) {
+			break
+		}
+		last = occupied
+	}
+	printf "%d occupied seats\n", occupied
+}
