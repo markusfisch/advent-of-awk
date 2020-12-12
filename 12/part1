@@ -2,28 +2,18 @@
 {
 	cmd = substr($1, 1, 1)
 	value = substr($1, 2)
-	if (cmd == "N") {
+	if (cmd == "N" || (cmd == "F" && bearing == 270)) {
 		y -= value
-	} else if (cmd == "E") {
+	} else if (cmd == "E" || (cmd == "F" && bearing == 0)) {
 		x += value
-	} else if (cmd == "S") {
+	} else if (cmd == "S" || (cmd == "F" && bearing == 90)) {
 		y += value
-	} else if (cmd == "W") {
+	} else if (cmd == "W" || (cmd == "F" && bearing == 180)) {
 		x -= value
 	} else if (cmd == "L") {
 		bearing = (bearing - value + 360) % 360
 	} else if (cmd == "R") {
 		bearing = (bearing + value) % 360
-	} else if (cmd == "F") {
-		if (bearing == 0) {
-			x += value
-		} else if (bearing == 90) {
-			y += value
-		} else if (bearing == 180) {
-			x -= value
-		} else if (bearing == 270) {
-			y -= value
-		}
 	}
 }
 END {
