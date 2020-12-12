@@ -17,6 +17,5 @@ END {
 			exit
 		}
 	}
-	++threes
-	print ones * threes
+	print ones * ++threes
 }

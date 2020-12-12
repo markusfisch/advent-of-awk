@@ -3,22 +3,20 @@
 	adapters[$1] = $1
 	if ($1 > max) max = $1
 }
-function count(n, c, i) {
-	if (n < 0 || adapters[n] == "") {
-		return 0
-	}
-	c = map[n]
-	if (c == "") {
-		c = 0
-		for (i = 1; i < 4; ++i) {
-			c += count(n - i)
-		}
-		map[n] = c
-	}
-	return c
-}
 END {
-	adapters[0] = 0
-	map[0] = 1
-	printf "%.0f\n", count(max)
+	len = 1
+	for (i = 1; i <= max; ++i) {
+		jolts = adapters[i]
+		if (jolts < 1) continue
+		sorted[len++] = jolts
+	}
+	options[0] = 1
+	for (i = 1; i < len; ++i) {
+		jolts = sorted[i]
+		for (j = 1; j < 4; ++j) {
+			k = options[jolts - j]
+			if (k > 0) options[jolts] += k
+		}
+	}
+	printf "%.0f\n", options[max]
 }
