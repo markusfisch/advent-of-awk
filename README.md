@@ -11,18 +11,25 @@ To re-generate (or verify) the `solutions` file, you also need
 [bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell)) and
 [diff](https://en.wikipedia.org/wiki/Diff).
 
+## Running the script for a certain day
+
+Replace `DAY` with the number of the day and `N` with 1 or 2:
+
+	$ cd DAY
+	$ ./partN input
+
 ## Running all scripts
 
 To run all scripts and print all the solutions do:
 
-	$ ./run report
+	$ ./test report
 
 If you want to play with the code and check that it's still working you can
 do:
 
-	$ ./run check
+	$ ./test check
 
 To update the `solutions` file after adding a new solution, you'd do:
 
-	$ ./run save
+	$ ./test save
 
