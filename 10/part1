@@ -1,4 +1,4 @@
-#!/usr/bin/env -S awk -f
+#!/usr/bin/awk -f
 {
 	adapters[$1] = $1
 	if ($1 > max) max = $1

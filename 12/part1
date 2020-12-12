@@ -1,4 +1,4 @@
-#!/usr/bin/env -S awk -f
+#!/usr/bin/awk -f
 {
 	cmd = substr($1, 1, 1)
 	value = substr($1, 2)

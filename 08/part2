@@ -1,4 +1,4 @@
-#!/usr/bin/env -S awk -f
+#!/usr/bin/awk -f
 {
 	cmds[NR] = $1
 	args[NR] = $2

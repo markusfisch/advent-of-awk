@@ -1,4 +1,4 @@
-#!/usr/bin/env -S awk -f
+#!/usr/bin/awk -f
 BEGIN {
 	wpx = 10
 	wpy = -1
