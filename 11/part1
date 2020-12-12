@@ -62,5 +62,5 @@ END {
 		}
 		last = occupied
 	}
-	printf "%d occupied seats\n", occupied
+	print occupied
 }
