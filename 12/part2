@@ -1,0 +1,52 @@
+#!/usr/bin/env -S awk -f
+BEGIN {
+	wpx = 10
+	wpy = -1
+}
+{
+	cmd = substr($1, 1, 1)
+	value = substr($1, 2)
+	if (cmd == "N") {
+		wpy -= value
+	} else if (cmd == "E") {
+		wpx += value
+	} else if (cmd == "S") {
+		wpy += value
+	} else if (cmd == "W") {
+		wpx -= value
+	} else if (cmd == "L") {
+		if (value == 90) {
+			t = wpx
+			wpx = wpy
+			wpy = -t
+		} else if (value == 180) {
+			wpx = -wpx
+			wpy = -wpy
+		} else if (value == 270) {
+			t = wpx
+			wpx = -wpy
+			wpy = t
+		}
+	} else if (cmd == "R") {
+		if (value == 90) {
+			t = wpx
+			wpx = -wpy
+			wpy = t
+		} else if (value == 180) {
+			wpx = -wpx
+			wpy = -wpy
+		} else if (value == 270) {
+			t = wpx
+			wpx = wpy
+			wpy = -t
+		}
+	} else if (cmd == "F") {
+		x += wpx * value
+		y += wpy * value
+	}
+}
+END {
+	d = x + y
+	d = d > 0 ? d : -d
+	print d
+}
