@@ -1,0 +1,21 @@
+#!/usr/bin/awk -f
+BEGIN {
+	FS=","
+}
+{
+	if (NF == 1) {
+		t = $1
+	} else {
+		min = 999999
+		for (i = 1; i <= NF; ++i) {
+			if ($i == "x") continue
+			rest = t % $i
+			wait = rest == 0 ? 0 : $i - rest
+			if (wait < min) {
+				min = wait
+				line = $i
+			}
+		}
+		print line * min
+	}
+}
