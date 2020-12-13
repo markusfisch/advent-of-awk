@@ -24,7 +24,7 @@ BEGIN {
 				}
 			}
 			if (miss == 0) {
-				print t
+				printf "%.0f\n", t
 				break
 			}
 		}
