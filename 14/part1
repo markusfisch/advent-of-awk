@@ -1,0 +1,30 @@
+#!/usr/bin/awk -f
+function d2b(d, l, b) {
+	while (d || l > 0) {
+		b = d % 2 b
+		d = int(d / 2)
+		--l
+	}
+	return b
+}
+/mask/ { mlen = split($3, mask, "") }
+/mem/ {
+	split(d2b($3, mlen), value, "")
+	d = 0
+	for (i = 1; i <= mlen; ++i) {
+		v = value[i]
+		m = mask[i]
+		if (m != "X") {
+			v = m
+		}
+		d = d * 2 + v
+	}
+	split($1, idx, "[")
+	mem[idx[2]] = d
+}
+END {
+	for (i in mem) {
+		sum += mem[i]
+	}
+	printf "%.0f\n", sum
+}
