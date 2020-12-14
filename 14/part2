@@ -31,7 +31,8 @@ function b2d(b, x, d, i, a, m) {
 	split($1, idx, "[")
 	split(d2b(int(idx[2]), mlen), addr, "")
 	for (x = 0; x < combinations; ++x) {
-		mem[b2d(addr, d2b(x, xlen))] = $3
+		# %.0f to make mawk use the whole number as array subscript
+		mem[sprintf("%.0f", b2d(addr, d2b(x, xlen)))] = $3
 	}
 }
 END {
