@@ -1,27 +1,2 @@
-#!/usr/bin/awk -f
-BEGIN {
-	FS=","
-}
-{
-	delete before
-	delete spoken
-	for (i = 1; i <= NF; ++i) {
-		before[$i] = i
-	}
-	last = $NF
-	for (; i <= 30000000; ++i) {
-		j = spoken[last]
-		k = before[last]
-		if (j > 0 && k > 0) {
-			last = j - k
-		} else {
-			last = 0
-		}
-		b = spoken[last]
-		if (b > 0) {
-			before[last] = b
-		}
-		spoken[last] = i
-	}
-	print last
-}
+#!/usr/bin/env bash
+GAMES=30000000 ./part1 "$@"

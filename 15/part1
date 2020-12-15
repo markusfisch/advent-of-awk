@@ -1,27 +1,20 @@
 #!/usr/bin/awk -f
 BEGIN {
 	FS=","
+	games = ENVIRON["GAMES"]
+	games = games > 0 ? games : 2020
 }
 {
-	delete before
 	delete spoken
-	for (i = 1; i <= NF; ++i) {
-		before[$i] = i
+	for (i = 1; i < NF; ++i) {
+		spoken[$i] = i
 	}
 	last = $NF
-	for (; i <= 2020; ++i) {
-		j = spoken[last]
-		k = before[last]
-		if (j > 0 && k > 0) {
-			last = j - k
-		} else {
-			last = 0
-		}
-		b = spoken[last]
-		if (b > 0) {
-			before[last] = b
-		}
-		spoken[last] = i
+	for (; i < games; ++i) {
+		before = last
+		s = spoken[last]
+		last = i - (s > 0 ? s : i)
+		spoken[before] = i
 	}
-	print last
+	printf "%.0f\n", last
 }
