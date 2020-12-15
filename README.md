@@ -21,6 +21,7 @@
 | [12][12] | [Part 1](12/part1) | [Part 2](12/part1) |
 | [13][13] | [Part 1](13/part1) | [Part 2](13/part1) |
 | [14][14] | [Part 1](14/part1) | [Part 2](14/part1) |
+| [15][15] | [Part 1](15/part1) | [Part 2](15/part1) |
 
 ## Requirements
 
@@ -48,6 +49,9 @@ do:
 
 	$ ./test check
 
+If this prints nothing it means all solutions are still correct.
+Otherwise the differences will be shown.
+
 To update the `solutions` file after adding a new solution, you'd do:
 
 	$ ./test save
@@ -66,3 +70,4 @@ To update the `solutions` file after adding a new solution, you'd do:
 [12]: https://adventofcode.com/2020/day/12
 [13]: https://adventofcode.com/2020/day/13
 [14]: https://adventofcode.com/2020/day/14
+[15]: https://adventofcode.com/2020/day/15
