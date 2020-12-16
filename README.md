@@ -7,22 +7,22 @@
 
 | Puzzle   | Part 1             | Part 2             |
 | --------:| ------------------ | ------------------ |
-| [1][1]   | [Part 1](01/part1) | [Part 2](01/part1) |
-| [2][2]   | [Part 1](02/part1) | [Part 2](02/part1) |
-| [3][3]   | [Part 1](03/part1) | [Part 2](03/part1) |
-| [4][4]   | [Part 1](04/part1) | [Part 2](04/part1) |
-| [5][5]   | [Part 1](05/part1) | [Part 2](05/part1) |
-| [6][6]   | [Part 1](06/part1) | [Part 2](06/part1) |
-| [7][7]   | [Part 1](07/part1) | [Part 2](07/part1) |
-| [8][8]   | [Part 1](08/part1) | [Part 2](08/part1) |
-| [9][9]   | [Part 1](09/part1) | [Part 2](09/part1) |
-| [10][10] | [Part 1](10/part1) | [Part 2](10/part1) |
-| [11][11] | [Part 1](11/part1) | [Part 2](11/part1) |
-| [12][12] | [Part 1](12/part1) | [Part 2](12/part1) |
-| [13][13] | [Part 1](13/part1) | [Part 2](13/part1) |
-| [14][14] | [Part 1](14/part1) | [Part 2](14/part1) |
-| [15][15] | [Part 1](15/part1) | [Part 2](15/part1) |
-| [16][16] | [Part 1](16/part1) | [Part 2](16/part1) |
+| [1][1]   | [Part 1](01/part1) | [Part 2](01/part2) |
+| [2][2]   | [Part 1](02/part1) | [Part 2](02/part2) |
+| [3][3]   | [Part 1](03/part1) | [Part 2](03/part2) |
+| [4][4]   | [Part 1](04/part1) | [Part 2](04/part2) |
+| [5][5]   | [Part 1](05/part1) | [Part 2](05/part2) |
+| [6][6]   | [Part 1](06/part1) | [Part 2](06/part2) |
+| [7][7]   | [Part 1](07/part1) | [Part 2](07/part2) |
+| [8][8]   | [Part 1](08/part1) | [Part 2](08/part2) |
+| [9][9]   | [Part 1](09/part1) | [Part 2](09/part2) |
+| [10][10] | [Part 1](10/part1) | [Part 2](10/part2) |
+| [11][11] | [Part 1](11/part1) | [Part 2](11/part2) |
+| [12][12] | [Part 1](12/part1) | [Part 2](12/part2) |
+| [13][13] | [Part 1](13/part1) | [Part 2](13/part2) |
+| [14][14] | [Part 1](14/part1) | [Part 2](14/part2) |
+| [15][15] | [Part 1](15/part1) | [Part 2](15/part2) |
+| [16][16] | [Part 1](16/part1) | [Part 2](16/part2) |
 
 ## Requirements
 
