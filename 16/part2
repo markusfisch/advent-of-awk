@@ -1,0 +1,82 @@
+#!/usr/bin/awk -f
+BEGIN {
+	FS="[:,-]|( or )"
+}
+/^[a-z]/ {
+	if (NF == 5) {
+		++nrules
+		for (i = 1; i <= NF; ++i) {
+			rules[nrules, i] = $i
+		}
+	}
+}
+/^[0-9]/ {
+	valid = 1
+	for (i = 1; i <= NF; ++i) {
+		found = 0
+		for (r = 1; r <= nrules; ++r) {
+			if (($i >= rules[r, 2] && $i <= rules[r, 3]) ||
+					($i >= rules[r, 4] && $i <= rules[r, 5])) {
+				found = 1
+				break
+			}
+		}
+		if (found == 0) {
+			valid = 0
+			break
+		}
+	}
+	if (valid == 1) {
+		++ntickets
+		for (i = 1; i <= NF; ++i) {
+			values[ntickets, i] = $i
+		}
+		ncols = NF
+	}
+}
+END {
+	for (c = 1; c <= ncols; ++c) {
+		found = 0
+		for (r = 1; r <= nrules; ++r) {
+			miss = 0
+			for (t = 2; t <= ntickets; ++t) {
+				value = values[t, c]
+				if ((value < rules[r, 2] || value > rules[r, 3]) &&
+						(value < rules[r, 4] || value > rules[r, 5])) {
+					miss = 1
+					break
+				}
+			}
+			if (miss == 0) {
+				found = 1
+				matches[c] = matches[c] " " r
+			}
+		}
+	}
+	for (c = 1; c <= ncols; ++c) {
+		for (m = s; m <= ncols; ++m) {
+			if (split(matches[m], parts, " ") == 1) {
+				idx = parts[1]
+				order[m] = idx
+				for (j = 1; j <= ncols; ++j) {
+					kl = split(matches[j], parts, " ")
+					list = ""
+					for (k = 1; k <= kl; ++k) {
+						if (parts[k] != idx) {
+							list = list " " parts[k]
+						}
+					}
+					matches[j] = list
+				}
+				break
+			}
+		}
+	}
+	sum = 1
+	for (o = 1; o <= ncols; ++o) {
+		if (rules[order[o], 1] ~ /departure/) {
+			sum *= values[1, o]
+		}
+	}
+	print sum
+}

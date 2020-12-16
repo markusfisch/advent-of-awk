@@ -1,0 +1,30 @@
+#!/usr/bin/awk -f
+BEGIN {
+	FS="[:,-]|( or )"
+}
+/^[a-z]/ {
+	if (NF == 5) {
+		++nrules
+		for (i = 1; i <= NF; ++i) {
+			rules[nrules, i] = $i
+		}
+	}
+}
+/^[0-9]/ {
+	for (i = 1; i <= NF; ++i) {
+		found = 0
+		for (r = 1; r <= nrules; ++r) {
+			if (($i >= rules[r, 2] && $i <= rules[r, 3]) ||
+					($i >= rules[r, 4] && $i <= rules[r, 5])) {
+				found = 1
+				break
+			}
+		}
+		if (found == 0) {
+			invalid += $i
+		}
+	}
+}
+END {
+	print invalid
+}
