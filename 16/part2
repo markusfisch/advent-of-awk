@@ -35,9 +35,9 @@ BEGIN {
 	}
 }
 END {
-	for (c = 1; c <= ncols; ++c) {
+	for (r = 1; r <= nrules; ++r) {
 		found = 0
-		for (r = 1; r <= nrules; ++r) {
+		for (c = 1; c <= ncols; ++c) {
 			miss = 0
 			for (t = 2; t <= ntickets; ++t) {
 				value = values[t, c]
@@ -78,5 +78,5 @@ END {
 			sum *= values[1, o]
 		}
 	}
-	print sum
+	printf "%.0f\n", sum
 }
