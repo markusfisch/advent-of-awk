@@ -22,6 +22,7 @@
 | [13][13] | [Part 1](13/part1) | [Part 2](13/part1) |
 | [14][14] | [Part 1](14/part1) | [Part 2](14/part1) |
 | [15][15] | [Part 1](15/part1) | [Part 2](15/part1) |
+| [16][16] | [Part 1](16/part1) | [Part 2](16/part1) |
 
 ## Requirements
 
@@ -71,3 +72,4 @@ To update the `solutions` file after adding a new solution, you'd do:
 [13]: https://adventofcode.com/2020/day/13
 [14]: https://adventofcode.com/2020/day/14
 [15]: https://adventofcode.com/2020/day/15
+[16]: https://adventofcode.com/2020/day/16
