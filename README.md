@@ -3,27 +3,27 @@
 [AWK](https://en.wikipedia.org/wiki/AWK) solutions for
 [Advent of Code 2020](https://adventofcode.com/2020).
 
-## Solutions
+## Puzzles & Solutions
 
-| Puzzle   | Part 1             | Part 2             |
-| --------:| ------------------ | ------------------ |
-| [1][1]   | [Part 1](01/part1) | [Part 2](01/part2) |
-| [2][2]   | [Part 1](02/part1) | [Part 2](02/part2) |
-| [3][3]   | [Part 1](03/part1) | [Part 2](03/part2) |
-| [4][4]   | [Part 1](04/part1) | [Part 2](04/part2) |
-| [5][5]   | [Part 1](05/part1) | [Part 2](05/part2) |
-| [6][6]   | [Part 1](06/part1) | [Part 2](06/part2) |
-| [7][7]   | [Part 1](07/part1) | [Part 2](07/part2) |
-| [8][8]   | [Part 1](08/part1) | [Part 2](08/part2) |
-| [9][9]   | [Part 1](09/part1) | [Part 2](09/part2) |
-| [10][10] | [Part 1](10/part1) | [Part 2](10/part2) |
-| [11][11] | [Part 1](11/part1) | [Part 2](11/part2) |
-| [12][12] | [Part 1](12/part1) | [Part 2](12/part2) |
-| [13][13] | [Part 1](13/part1) | [Part 2](13/part2) |
-| [14][14] | [Part 1](14/part1) | [Part 2](14/part2) |
-| [15][15] | [Part 1](15/part1) | [Part 2](15/part2) |
-| [16][16] | [Part 1](16/part1) | [Part 2](16/part2) |
-| [17][17] | [Part 1](17/part1) | [Part 2](17/part2) |
+| Puzzle                                | Part 1             | Part 2             |
+| -------------------------------------:| ------------------ | ------------------ |
+| [Day 1: Report Repair][1]             | [Part 1](01/part1) | [Part 2](01/part2) |
+| [Day 2: Password Philosophy][2]       | [Part 1](02/part1) | [Part 2](02/part2) |
+| [Day 3: Toboggan Trajectory][3]       | [Part 1](03/part1) | [Part 2](03/part2) |
+| [Day 4: Passport Processing][4]       | [Part 1](04/part1) | [Part 2](04/part2) |
+| [Day 5: Binary Boarding][5]           | [Part 1](05/part1) | [Part 2](05/part2) |
+| [Day 6: Custom Customs][6]            | [Part 1](06/part1) | [Part 2](06/part2) |
+| [Day 7: Handy Haversacks][7]          | [Part 1](07/part1) | [Part 2](07/part2) |
+| [Day 8: Handheld Halting][8]          | [Part 1](08/part1) | [Part 2](08/part2) |
+| [Day 9: Encoding Error][9]            | [Part 1](09/part1) | [Part 2](09/part2) |
+| [Day 10: Adapter Array][10]           | [Part 1](10/part1) | [Part 2](10/part2) |
+| [Day 11: Seating System ][11]         | [Part 1](11/part1) | [Part 2](11/part2) |
+| [Day 12: Rain Risk][12]               | [Part 1](12/part1) | [Part 2](12/part2) |
+| [Day 13: Shuttle Search][13]          | [Part 1](13/part1) | [Part 2](13/part2) |
+| [Day 14: Docking Data][14]            | [Part 1](14/part1) | [Part 2](14/part2) |
+| [Day 15: Rambunctious Recitation][15] | [Part 1](15/part1) | [Part 2](15/part2) |
+| [Day 16: Ticket Translation][16]      | [Part 1](16/part1) | [Part 2](16/part2) |
+| [Day 17: Conway Cubes][17]            | [Part 1](17/part1) | [Part 2](17/part2) |
 
 ## Requirements
 
@@ -35,12 +35,17 @@ To re-generate (or verify) the `solutions` file, you also need
 
 ## Running the script for a certain day
 
-Replace `DAY` with the number of the day and `N` with the number of the part:
+Replace `DAY` with the two-digit number of the day and `N` with the number
+of the part:
 
 	$ cd DAY
 	$ ./partN input
 
 ## Running all scripts
+
+Please note running all the scripts can take some time.
+Some solutions require a lot of passes and/or memory and while `AWK` is
+certainly not a slow tool, it does reach its limits.
 
 To run all scripts and print all the solutions do:
 
@@ -51,7 +56,7 @@ do:
 
 	$ ./test check
 
-If this prints nothing it means all solutions are still correct.
+This will print nothing if all the solutions are correct.
 Otherwise the differences will be shown.
 
 To update the `solutions` file after adding a new solution, you'd do:
