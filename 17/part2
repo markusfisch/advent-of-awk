@@ -94,10 +94,8 @@ function count_active(x, y, z, w, cell, active) {
 	return active
 }
 END {
-	count_active()
 	for (i = 1; i <= 6; ++i) {
 		conway_cubes()
-		active = count_active()
 	}
-	print active
+	print count_active()
 }
