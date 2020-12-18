@@ -1,0 +1,44 @@
+#!/usr/bin/awk -f
+BEGIN {
+	FS = ""
+}
+function combine(a, op, b) {
+	if (op == "+") {
+		return a + b
+	} else if (op == "*") {
+		return a * b
+	}
+	return b
+}
+function calc(sc, result, op) {
+	result = 0
+	for (; i <= NF; ++i) {
+		if ($i == "+") {
+			if (sc == 1) {
+				return result
+			}
+			op = $i
+		} else if ($i == "*") {
+			++i
+			# return because the only stop character is ")"
+			# in which case we need to return from that sub
+			# calculation too
+			return combine(result, "*", calc())
+		} else if ($i == "(") {
+			++i
+			result = combine(result, op, calc())
+		} else if ($i == ")") {
+			return result
+		} else if ($i ~ /[0-9]/) {
+			result = combine(result, op, $i)
+		}
+	}
+	return result
+}
+{
+	i = 1
+	sum += calc()
+}
+END {
+	printf "%.0f\n", sum
+}
