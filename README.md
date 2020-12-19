@@ -25,6 +25,7 @@
 | [Day 16: Ticket Translation][16]      | [Part 1](16/part1) | [Part 2](16/part2) |
 | [Day 17: Conway Cubes][17]            | [Part 1](17/part1) | [Part 2](17/part2) |
 | [Day 18: Operation Order][18]         | [Part 1](18/part1) | [Part 2](18/part2) |
+| [Day 19: Monster Messages][19]        | [Part 1](19/part1) | [Part 2](19/part2) |
 
 ## Requirements
 
@@ -82,3 +83,4 @@ To update the `solutions` file after adding a new solution, you'd do:
 [16]: https://adventofcode.com/2020/day/16
 [17]: https://adventofcode.com/2020/day/17
 [18]: https://adventofcode.com/2020/day/18
+[19]: https://adventofcode.com/2020/day/19

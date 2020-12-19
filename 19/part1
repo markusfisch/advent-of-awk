@@ -1,0 +1,46 @@
+#!/usr/bin/awk -f
+BEGIN {
+	FS="[ :\"]+"
+}
+/^[0-9]+:/ {
+	for (i = 2; i <= NF; ++i) {
+		rules[$1, i - 1] = $i
+	}
+}
+function check(rule, r, cond, start, invalid) {
+	start = i
+	invalid = 0
+	for (r = 1; ; ++r) {
+		cond = rules[rule, r]
+		if (cond == "") {
+			break
+		} else if (cond == "|") {
+			if (invalid == 0) break
+			i = start
+			invalid = 0
+			continue
+		} else if (invalid > 0) {
+			continue
+		} else if (cond ~ /[a-z]/) {
+			if (parts[i] == cond) {
+				++i
+			} else {
+				invalid = 1
+			}
+		} else if (check(cond) > 0) {
+			invalid = 1
+		}
+	}
+	return invalid
+}
+/^[a-z]/ {
+	i = 1
+	max = split($1, parts, "")
+	result = check(0)
+	if (result == 0 && i == max + 1) {
+		++valid
+	}
+}
+END {
+	print valid
+}

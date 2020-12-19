@@ -1,0 +1,66 @@
+#!/usr/bin/awk -f
+BEGIN {
+	FS="[:|]+"
+}
+/^[0-9]+:/ {
+	# patch rules 8 and 11 according to the puzzle
+	if ($1 == "8") {
+		$2 = 42
+		$3 = "42 8"
+		NF=3
+	} else if ($1 == "11") {
+		$2 = "42 31"
+		$3 = "42 11 31"
+		NF=3
+	}
+	for (i = 2; i <= NF; ++i) {
+		gsub(/^[ "]+/, "", $i)
+		gsub(/[ "]$/, "", $i)
+		rules[$1, i - 1] = $i
+	}
+}
+function check(i, set, conds, c, cl, cond) {
+	cl = split(set, conds, " ")
+	for (c = 1; c <= cl; ++c) {
+		cond = conds[c]
+		if (i > max) {
+			return 0
+		} else if (cond ~ /[a-z]/) {
+			if (parts[i] != cond) {
+				return 0
+			}
+			++i
+			if (i > max) {
+				++v
+			}
+		} else {
+			i = parse(cond, i)
+			if (i < 1) {
+				return 0
+			}
+		}
+	}
+	return i
+}
+function parse(rule, i, r, n) {
+	for (r = 1; ; ++r) {
+		set = rules[rule, r]
+		if (set == "") break
+		n = check(i, set)
+		if (n > 0) {
+			return n
+		}
+	}
+	return 0
+}
+/^[a-z]/ {
+	max = split($1, parts, "")
+	v = 0
+	result = parse(0, 1, 0)
+	if (v == 1) {
+		++valid
+	}
+}
+END {
+	print valid
+}
