@@ -20,4 +20,4 @@ check() {
 save() {
 	report > solutions
 }
-${@:-check}
+"${@:-check}"
