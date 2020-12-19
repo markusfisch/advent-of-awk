@@ -15,7 +15,9 @@ function check(rule, r, cond, start, invalid) {
 		if (cond == "") {
 			break
 		} else if (cond == "|") {
-			if (invalid == 0) break
+			if (invalid == 0) {
+				break
+			}
 			i = start
 			invalid = 0
 			continue

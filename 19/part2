@@ -45,7 +45,9 @@ function check(i, set, conds, c, cl, cond) {
 function parse(rule, i, r, n) {
 	for (r = 1; ; ++r) {
 		set = rules[rule, r]
-		if (set == "") break
+		if (set == "") {
+			break
+		}
 		n = check(i, set)
 		if (n > 0) {
 			return n
