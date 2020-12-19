@@ -56,7 +56,7 @@ function parse(rule, i, r, n) {
 /^[a-z]/ {
 	max = split($1, parts, "")
 	v = 0
-	result = parse(0, 1, 0)
+	result = parse(0, 1)
 	if (v == 1) {
 		++valid
 	}
