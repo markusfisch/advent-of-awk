@@ -23,9 +23,7 @@ function check(i, set, conds, c, cl, cond) {
 	cl = split(set, conds, " ")
 	for (c = 1; c <= cl; ++c) {
 		cond = conds[c]
-		if (i > max) {
-			return 0
-		} else if (cond ~ /[a-z]/) {
+		if (cond ~ /[a-z]/) {
 			if (parts[i] != cond) {
 				return 0
 			}
@@ -35,7 +33,7 @@ function check(i, set, conds, c, cl, cond) {
 			}
 		} else {
 			i = parse(cond, i)
-			if (i < 1) {
+			if (i < 1 || i > max) {
 				return 0
 			}
 		}
