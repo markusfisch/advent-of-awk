@@ -1,0 +1,72 @@
+#!/usr/bin/awk -f
+{
+	split($0, parts, " [(]contains ") != 2
+	ningredients = split(parts[1], ingredients, " ")
+	gsub(/[ )]$/, "", parts[2])
+	nallergens = split(parts[2], allergens, ", ")
+	for (a = 1; a <= nallergens; ++a) {
+		allergen = allergens[a]
+		++counts[allergen]
+		sets[allergen, counts[allergen]] = parts[1]
+	}
+	for (i = 1; i <= ningredients; ++i) {
+		++all_ingredients[ingredients[i]]
+	}
+}
+END {
+	loop = 1
+	while (loop) {
+		loop = 0
+		for (allergen in counts) {
+			if (solutions[allergen] != "") continue
+			count = counts[allergen]
+			delete occurences
+			for (i = 1; i <= count; ++i) {
+				split(sets[allergen, i], ingredients, " ")
+				for (j in ingredients) {
+					++occurences[ingredients[j]]
+				}
+			}
+			candidate = ""
+			last = ""
+			min = 1
+			options = 0
+			for (ingredient in occurences) {
+				if (ignores[ingredient] > 0) {
+					continue
+				}
+				amount = occurences[ingredient]
+				if (amount > min) {
+					min = amount
+					candidate = ingredient
+				} else if (min > 1 && amount == min) {
+					candidate = ""
+					loop = 1
+				}
+				++options
+				last = ingredient
+			}
+			if (candidate == "" && options == 1) {
+				candidate = last
+			}
+			if (candidate != "") {
+				solutions[allergen] = candidate
+				ignores[candidate] = 1
+			}
+		}
+	}
+	# poor man's sort, not all AWK's have a sort() function
+	for (_ in solutions) ++nsolutions
+	for (i = 1; i <= nsolutions; ++i) {
+		min = "zzzzzzzzz"
+		for (allergen in solutions) {
+			if (allergen < min) {
+				min = allergen
+			}
+		}
+		printf "%s", solutions[min]
+		if (i < nsolutions) printf ","
+		delete solutions[min]
+	}
+	printf "\n"
+}
