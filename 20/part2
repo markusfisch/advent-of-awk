@@ -1,0 +1,374 @@
+#!/usr/bin/awk -f
+BEGIN {
+	FS=""
+}
+/Tile/ {
+	split($0, parts, "[ :]")
+	++ntiles
+	tile_id = parts[2]
+	unassigned[ntiles] = tile_id
+	y = 1
+}
+/[#.]/ {
+	tile_width = NF
+	tile_height = NF
+	for (x = 1; x <= NF; ++x) {
+		tiles[tile_id, x, y] = $x
+	}
+	++y
+}
+function assign(id, i) {
+	delete unassigned[i]
+	map[sx, sy] = id
+	if (sx < left) left = sx
+	if (sx > right) right = sx
+	if (sy < top) top = sy
+	if (sy > bottom) bottom = sy
+	return 1
+}
+function copy(id, x, y) {
+	delete view
+	for (y = 1; y <= tile_height; ++y) {
+		for (x = 1; x <= tile_width; ++x) {
+			view[x, y] = tiles[id, x, y]
+		}
+	}
+}
+function rotate(id, times, t, x, y) {
+	for (t = 1; t <= times; ++t) {
+		copy(id)
+		for (y = 1; y <= tile_height; ++y) {
+			for (x = 1; x <= tile_width; ++x) {
+				tiles[id, x, y] = view[y, tile_height - (x - 1)]
+			}
+		}
+	}
+}
+function xflip(id) {
+	copy(id)
+	for (y = 1; y <= tile_height; ++y) {
+		for (x = 1; x <= tile_width; ++x) {
+			tiles[id, x, y] = view[tile_width - (x - 1), y]
+		}
+	}
+}
+function yflip(id) {
+	copy(id)
+	for (y = 1; y <= tile_height; ++y) {
+		for (x = 1; x <= tile_width; ++x) {
+			tiles[id, x, y] = view[x, tile_height - (y - 1)]
+		}
+	}
+}
+function match_edge(id, fx, fy, tx, ty, tvx, tvy, i, rx, ry) {
+	rx = ox
+	ry = oy
+	while (1) {
+		if (tiles[current, rx, ry] != tiles[id, fx, fy]) {
+			return 0
+		}
+		if (fx == tx && fy == ty) break
+		fx += tvx
+		fy += tvy
+		rx += vx
+		ry += vy
+	}
+	return 1
+}
+function find_matching_edge(side, i, id) {
+	#                                      Unassigned
+	#
+	#                        T>   B>   L>   R>   T<   B<   L<   R<
+	#                         v                   v
+	#                        *-+  +-+  *-+  +-*  +-*  +-+  +-+  +-+
+	#                        | |  | | >| |  | |< | |  | | >| |  | |<
+	#                        +-+  *-+  +-+  +-+  +-+  +-*  *-+  +-*
+	#                              ^                   ^
+	#         v
+	#        *-+
+	#        | |  Top        YF   0    270  90   180  XF   270  90
+	#        +-+                            XF             XF
+	#
+	#  C     +-+
+	#  u     | |  Bottom     0    YF   90   270  XF   180  90   270
+	#  r     *-+                       XF                       XF
+	#  r      ^
+	#  e     *-+
+	#  n    >| |  Left       90   270  XF   0    90   270  180  YF
+	#  t     +-+                  YF             YF
+	#
+	#        +-*
+	#        | |< Right      270  90   0    XF   270  90   YF   180
+	#        +-+             YF                       YF
+	#
+	for (i in unassigned) {
+		id = unassigned[i]
+		if (id == current) continue
+		# check top edge forward
+		if (match_edge(id, 1, 1, tile_width, 1, 1, 0)) {
+			if (side == "top") {
+				yflip(id)
+			} else if (side == "left") {
+				rotate(id, 1)
+			} else if (side == "right") {
+				rotate(id, 3)
+				yflip(id)
+			}
+			return assign(id, i)
+		}
+		# check top edge backward
+		if (match_edge(id, tile_width, 1, 1, 1, -1, 0)) {
+			if (side == "top") {
+				rotate(id, 2)
+			} else if (side == "bottom") {
+				xflip(id)
+			} else if (side == "left") {
+				rotate(id, 1)
+				yflip(id)
+			} else if (side == "right") {
+				rotate(id, 3)
+			}
+			return assign(id, i)
+		}
+		# check bottom edge forward
+		if (match_edge(id, 1, tile_height, tile_width, tile_height, 1, 0)) {
+			if (side == "bottom") {
+				yflip(id)
+			} else if (side == "left") {
+				rotate(id, 1)
+				xflip(id)
+			} else if (side == "right") {
+				rotate(id, 1)
+			}
+			return assign(id, i)
+		}
+		# check bottom edge backward
+		if (match_edge(id, tile_width, tile_height, 1, tile_height, -1, 0)) {
+			if (side == "top") {
+				xflip(id)
+			} else if (side == "bottom") {
+				rotate(id, 2)
+			} else if (side == "left") {
+				rotate(id, 3)
+			} else if (side == "right") {
+				rotate(id, 1)
+				yflip(id)
+			}
+			return assign(id, i)
+		}
+		# check left edge forward
+		if (match_edge(id, 1, 1, 1, tile_height, 0, 1)) {
+			if (side == "top") {
+				rotate(id, 3)
+			} else if (side == "bottom") {
+				rotate(id, 1)
+				xflip(id)
+			} else if (side == "left") {
+				xflip(id)
+			}
+			return assign(id, i)
+		}
+		# check left edge backward
+		if (match_edge(id, 1, tile_height, 1, 1, 0, -1)) {
+			if (side == "top") {
+				rotate(id, 3)
+				xflip(id)
+			} else if (side == "bottom") {
+				rotate(id, 1)
+			} else if (side == "left") {
+				rotate(id, 2)
+			} else if (side == "right") {
+				yflip(id)
+			}
+			return assign(id, i)
+		}
+		# check right edge forward
+		if (match_edge(id, tile_width, 1, tile_width, tile_height, 0, 1)) {
+			if (side == "top") {
+				rotate(id, 1)
+				xflip(id)
+			} else if (side == "bottom") {
+				rotate(id, 3)
+			} else if (side == "right") {
+				xflip(id)
+			}
+			return assign(id, i)
+		}
+		# check right edge backward
+		if (match_edge(id, tile_width, tile_height, tile_width, 1, 0, -1)) {
+			if (side == "top") {
+				rotate(id, 1)
+			} else if (side == "bottom") {
+				rotate(id, 3)
+				xflip(id)
+			} else if (side == "left") {
+				yflip(id)
+			} else if (side == "right") {
+				rotate(id, 2)
+			}
+			return assign(id, i)
+		}
+	}
+	return 0
+}
+function assemble() {
+	left = 0; top = 0
+	right = 0; bottom = 0
+	map[left, top] = unassigned[1]
+	delete unassigned[1]
+	while (1) {
+		for (my = top; my <= bottom; ++my) {
+			for (mx = left; mx <= right; ++mx) {
+				current = map[mx, my]
+				if (current == "") continue
+				sx = mx; sy = my - 1
+				if (map[sx, sy] == "") {
+					ox = 1; oy = 1; vx = 1; vy = 0
+					find_matching_edge("top")
+				}
+				sx = mx; sy = my + 1
+				if (map[sx, sy] == "") {
+					ox = 1; oy = tile_height; vx = 1; vy = 0
+					find_matching_edge("bottom")
+				}
+				sx = mx - 1; sy = my
+				if (map[sx, sy] == "") {
+					ox = 1; oy = 1; vx = 0; vy = 1
+					find_matching_edge("left")
+				}
+				sx = mx + 1; sy = my
+				if (map[sx, sy] == "") {
+					ox = tile_width; oy = 1; vx = 0; vy = 1
+					find_matching_edge("right")
+				}
+			}
+		}
+		len = 0
+		for (i in unassigned) ++len
+		if (len < 1) break
+	}
+}
+function drop_borders_and_merge(mx, my, tx, ty, id) {
+	image_height = 0
+	for (my = top; my <= bottom; ++my) {
+		for (ty = 2; ty < tile_height; ++ty) {
+			image_width = 0
+			++image_height
+			for (mx = left; mx <= right; ++mx) {
+				id = map[mx, my]
+				for (tx = 2; tx < tile_width; ++tx) {
+					++image_width
+					image[image_width, image_height] = tiles[id, tx, ty]
+				}
+			}
+		}
+	}
+}
+function image_copy(x, y) {
+	delete view
+	for (y = 1; y <= image_height; ++y) {
+		for (x = 1; x <= image_width; ++x) {
+			view[x, y] = image[x, y]
+		}
+	}
+}
+function image_rotate(times, t, x, y) {
+	for (t = 1; t <= times; ++t) {
+		image_copy()
+		for (y = 1; y <= image_height; ++y) {
+			for (x = 1; x <= image_width; ++x) {
+				image[x, y] = view[y, image_height - (x - 1)]
+			}
+		}
+	}
+}
+function image_xflip() {
+	image_copy()
+	for (y = 1; y <= image_height; ++y) {
+		for (x = 1; x <= image_width; ++x) {
+			image[x, y] = view[image_width - (x - 1), y]
+		}
+	}
+}
+function image_yflip() {
+	image_copy()
+	for (y = 1; y <= image_height; ++y) {
+		for (x = 1; x <= image_width; ++x) {
+			image[x, y] = view[x, image_height - (y - 1)]
+		}
+	}
+}
+function count_sharps(x, y, sharps) {
+	sharps = 0
+	for (y = 1; y <= image_height; ++y) {
+		for (x = 1; x <= image_width; ++x) {
+			if (image[x, y] == "#") ++sharps
+		}
+	}
+	printf "%.0f\n", sharps
+}
+function mask_monster(u, v, s, t) {
+	for (t = 1; t <= mh; ++t) {
+		for (s = 1; s <= mw; ++s) {
+			if (monster[s, t] == "#" &&
+					image[u + (s - 1), v + (t - 1)] != "#") {
+				return 0
+			}
+		}
+	}
+	for (t = 1; t <= mh; ++t) {
+		for (s = 1; s <= mw; ++s) {
+			if (monster[s, t] == "#") {
+				image[u + (s - 1), v + (t - 1)] = "O"
+			}
+		}
+	}
+	return 1
+}
+function monster_scan(x, y, monsters) {
+	monsters = 0
+	for (y = 1; y <= image_height - mh; ++y) {
+		for (x = 1; x <= image_width - mw; ++x) {
+			monsters += mask_monster(x, y)
+		}
+	}
+	if (monsters > 0) {
+		count_sharps()
+		return 1
+	}
+	return 0
+}
+function mask_monsters(i, x, y) {
+	mw = split("..................#.", parts, "")
+	for (i = 1; i <= mw; ++i) monster[i, 1] = parts[i]
+	mw = split("#....##....##....###", parts, "")
+	for (i = 1; i <= mw; ++i) monster[i, 2] = parts[i]
+	mw = split(".#..#..#..#..#..#...", parts, "")
+	for (i = 1; i <= mw; ++i) monster[i, 3] = parts[i]
+	mh = 3
+	for (i = 1; i <= 4; ++i) {
+		if (monster_scan()) {
+			return
+		}
+		image_rotate(1)
+	}
+	image_yflip()
+	for (i = 1; i <= 4; ++i) {
+		if (monster_scan()) {
+			return
+		}
+		image_rotate(1)
+	}
+	image_xflip()
+	for (i = 1; i <= 4; ++i) {
+		if (monster_scan()) {
+			return
+		}
+		image_rotate(1)
+	}
+}
+END {
+	assemble()
+	drop_borders_and_merge()
+	mask_monsters()
+}
