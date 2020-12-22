@@ -28,6 +28,7 @@
 | [Day 19: Monster Messages][19]        | [Part 1](19/part1) | [Part 2](19/part2) |
 | [Day 20: Jurassic Jigsaw][20]         | [Part 1](20/part1) | [Part 2](20/part2) |
 | [Day 21: Allergen Assessment][21]     | [Part 1](21/part1) | [Part 2](21/part2) |
+| [Day 22: Crab Combat][22]             | [Part 1](22/part1) | [Part 2](22/part2) |
 
 ## Requirements
 
@@ -88,3 +89,4 @@ To update the `solutions` file after adding a new solution, you'd do:
 [19]: https://adventofcode.com/2020/day/19
 [20]: https://adventofcode.com/2020/day/20
 [21]: https://adventofcode.com/2020/day/21
+[22]: https://adventofcode.com/2020/day/22

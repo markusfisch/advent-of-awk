@@ -1,0 +1,64 @@
+#!/usr/bin/awk -f
+/Player/ {
+	++nplayers
+}
+/^[0-9]/ {
+	deck[nplayers] = deck[nplayers] " " $1
+}
+function take_first(cards, max, i, joined) {
+	++max
+	for (i = 2; i <= max; ++i) {
+		joined = joined " " cards[i]
+	}
+	return joined
+}
+function drop_first(cards, i, joined) {
+	for (i = 2; ; ++i) {
+		if (cards[i] < 1) break
+		joined = joined " " cards[i]
+	}
+	return joined
+}
+function calc_score(cards, len, i, mul, sum) {
+	mul = 1
+	for (i = len; i >= 1; --i) {
+		sum += cards[i] * mul
+		++mul
+	}
+	return sum
+}
+function recursive_combat(level, deck1, deck2, combos1, combos2, round,
+		i, a, b, cards1, cards2, ncards1, ncards2, winner) {
+	for (round = 1; ; ++round) {
+		ncards1 = split(deck1, cards1, " ")
+		ncards2 = split(deck2, cards2, " ")
+		if (ncards1 < 1) return level == 1 ? calc_score(cards2, ncards2) : 2
+		if (ncards2 < 1) return level == 1 ? calc_score(cards1, ncards1) : 1
+		deck1 = drop_first(cards1)
+		deck2 = drop_first(cards2)
+		a = cards1[1]
+		b = cards2[1]
+		if (ncards1 - 1 >= a && ncards2 - 1 >= b) {
+			winner = recursive_combat(level + 1,
+					take_first(cards1, a),
+					take_first(cards2, b))
+		} else {
+			winner = a > b ? 1 : 2
+		}
+		if (winner == 1) {
+			deck1 = deck1 " " a " " b
+		} else {
+			deck2 = deck2 " " b " " a
+		}
+		for (i = 1; i < round; ++i) {
+			if (combos1[i] == deck1 || combos2[i] == deck2) {
+				return 1
+			}
+		}
+		combos1[round] = deck1
+		combos2[round] = deck2
+	}
+}
+END {
+	printf "%.0f\n", recursive_combat(1, deck[1], deck[2])
+}

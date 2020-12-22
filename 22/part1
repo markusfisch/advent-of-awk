@@ -1,0 +1,46 @@
+#!/usr/bin/awk -f
+/Player/ {
+	++nplayers
+}
+/^[0-9]/ {
+	deck[nplayers] = deck[nplayers] " " $1
+}
+function drop_first(cards, i, joined) {
+	for (i = 2; ; ++i) {
+		if (cards[i] < 1) break
+		joined = joined " " cards[i]
+	}
+	return joined
+}
+function calc_score(cards, len, i, mul, sum) {
+	mul = 1
+	for (i = len; i >= 1; --i) {
+		sum += cards[i] * mul
+		++mul
+	}
+	return sum
+}
+END {
+	while (1) {
+		ncards1 = split(deck[1], cards1, " ")
+		ncards2 = split(deck[2], cards2, " ")
+		if (ncards1 < 1) {
+			score = calc_score(cards2, ncards2)
+			break
+		}
+		if (ncards2 < 1) {
+			score = calc_score(cards1, ncards1)
+			break
+		}
+		deck[1] = drop_first(cards1)
+		deck[2] = drop_first(cards2)
+		a = cards1[1]
+		b = cards2[1]
+		if (a > b) {
+			deck[1] = deck[1] " " a " " b
+		} else {
+			deck[2] = deck[2] " " b " " a
+		}
+	}
+	printf "%.0f\n", score
+}
