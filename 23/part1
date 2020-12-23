@@ -1,0 +1,55 @@
+#!/usr/bin/awk -f
+BEGIN {
+	FS=""
+}
+{
+	max = 0
+	for (i = 1; i <= NF; ++i) {
+		cups[i - 1] = $i
+		if ($i > max) max = $i
+	}
+	nrest = NF - 4
+	for (i = 0; i < 100; ++i) {
+		dest = cups[i % NF]
+		for (j = 1; j <= 3; ++j) {
+			pick[j] = cups[(i + j) % NF]
+		}
+		for (k = 0; k < nrest; ++k) {
+			rest[k] = cups[(i + j + k) % NF]
+		}
+		while (1) {
+			--dest
+			if (dest < 1) dest = max
+			insert = -1
+			for (k = 0; k < nrest; ++k) {
+				if (dest == rest[k]) {
+					insert = k
+					break
+				}
+			}
+			if (insert > -1) {
+				break
+			}
+		}
+		l = 0
+		for (j = 0; j < NF - 1; ++j) {
+			cups[(i + 1 + j) % NF] = rest[l]
+			++l
+			if (j == insert) {
+				for (k = 1; k <= 3; ++k) {
+					cups[(i + 2 + j) % NF] = pick[k]
+					++j
+				}
+			}
+		}
+	}
+	for (i = 0; i < NF; ++i) {
+		if (cups[i] == 1) {
+			for (j = 1; j < NF; ++j) {
+				printf "%d", cups[(i + j) % NF]
+			}
+			printf "\n"
+			break
+		}
+	}
+}
