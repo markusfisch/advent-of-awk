@@ -11,7 +11,6 @@ BEGIN {
 		lut[$n] = i
 		if ($n > max) max = $n
 	}
-	ncups = NF
 	ncups = 1000000
 	n = max + 1
 	for (; i < ncups; ++i) {
