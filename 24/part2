@@ -1,0 +1,70 @@
+#!/usr/bin/awk -f
+BEGIN {
+	FS=""
+}
+{
+	c = 0; r = 0
+	for (i = 1; i <= NF; ++i) {
+		if ($i == "e") {
+			--c
+		} else if ($i == "w") {
+			++c
+		} else if ($i == "n" && $(i + 1) == "e") {
+			--r; ++i
+		} else if ($i == "s" && $(i + 1) == "w") {
+			++r; ++i
+		} else if ($i == "n" && $(i + 1) == "w") {
+			++c; --r; ++i
+		} else if ($i == "s" && $(i + 1) == "e") {
+			--c; ++r; ++i
+		}
+	}
+	if (c < minC) minC = c
+	if (c > maxC) maxC = c
+	if (r < minR) minR = r
+	if (r > maxR) maxR = r
+	tiles[c, r] = !tiles[c, r]
+}
+function count(c, r) {
+	return \
+		view[c - 1, r] + \
+		view[c + 1, r] + \
+		view[c, r - 1] + \
+		view[c, r + 1] + \
+		view[c + 1, r - 1] + \
+		view[c - 1, r + 1]
+}
+function copy(i) {
+	for (i in tiles) {
+		view[i] = tiles[i]
+	}
+}
+function game_of_tiles(c, r, value, black) {
+	copy()
+	--minC
+	--minR
+	++maxC
+	++maxR
+	for (c = minC; c <= maxC; ++c) {
+		for (r = minR; r <= maxR; ++r) {
+			value = view[c, r]
+			black = count(c, r)
+			if (value == 1 && (black == 0 || black > 2)) {
+				tiles[c, r] = 0
+			} else if (black == 2) {
+				tiles[c, r] = 1
+			}
+		}
+	}
+}
+END {
+	for (i = 1; i <= 100; ++i) {
+		game_of_tiles()
+	}
+	for (i in tiles) {
+		if (tiles[i] > 0) {
+			++sum
+		}
+	}
+	printf "%.0f\n", sum
+}

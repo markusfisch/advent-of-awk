@@ -1,0 +1,31 @@
+#!/usr/bin/awk -f
+BEGIN {
+	FS=""
+}
+{
+	c = 0; r = 0
+	for (i = 1; i <= NF; ++i) {
+		if ($i == "e") {
+			--c
+		} else if ($i == "w") {
+			++c
+		} else if ($i == "n" && $(i + 1) == "e") {
+			--r; ++i
+		} else if ($i == "s" && $(i + 1) == "w") {
+			++r; ++i
+		} else if ($i == "n" && $(i + 1) == "w") {
+			++c; --r; ++i
+		} else if ($i == "s" && $(i + 1) == "e") {
+			--c; ++r; ++i
+		}
+	}
+	tiles[c, r] = !tiles[c, r]
+}
+END {
+	for (i in tiles) {
+		if (tiles[i] > 0) {
+			++sum
+		}
+	}
+	printf "%.0f\n", sum
+}
