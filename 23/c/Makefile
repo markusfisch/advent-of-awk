@@ -1,6 +1,6 @@
 BIN = part2
 
-$(BIN): part2.c
+$(BIN): main.c
 	$(CC) -O3 $^ -o $@
 
 clean:

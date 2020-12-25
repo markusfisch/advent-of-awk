@@ -2,54 +2,39 @@
 BEGIN {
 	FS=""
 }
+function find_dest(value) {
+	if (value < 1) {
+		return find_dest(ncups)
+	} else if (value == pick1 || value == pick2 || value == pick3) {
+		return find_dest(value - 1)
+	} else {
+		return value
+	}
+}
 {
-	max = 0
-	for (i = 1; i <= NF; ++i) {
-		cups[i - 1] = $i
-		if ($i > max) max = $i
+	delete cups
+	# the index of cups is the number, the value points to the next index
+	for (i = 1; i < NF; ++i) {
+		cups[$i] = $(i + 1)
 	}
-	nrest = NF - 4
-	for (i = 0; i < 100; ++i) {
-		dest = cups[i % NF]
-		for (j = 1; j <= 3; ++j) {
-			pick[j] = cups[(i + j) % NF]
-		}
-		for (k = 0; k < nrest; ++k) {
-			rest[k] = cups[(i + j + k) % NF]
-		}
-		while (1) {
-			--dest
-			if (dest < 1) dest = max
-			insert = -1
-			for (k = 0; k < nrest; ++k) {
-				if (dest == rest[k]) {
-					insert = k
-					break
-				}
-			}
-			if (insert > -1) {
-				break
-			}
-		}
-		l = 0
-		for (j = 0; j < NF - 1; ++j) {
-			cups[(i + 1 + j) % NF] = rest[l]
-			++l
-			if (j == insert) {
-				for (k = 1; k <= 3; ++k) {
-					cups[(i + 2 + j) % NF] = pick[k]
-					++j
-				}
-			}
-		}
+	cups[$NF] = $1
+	ncups = NF
+	current = $1
+	for (i = 1; i <= 100; ++i) {
+		pick1 = cups[current]
+		pick2 = cups[pick1]
+		pick3 = cups[pick2]
+		dest = find_dest(current - 1)
+		nx = cups[pick3]
+		cups[current] = nx
+		current = nx
+		cups[pick3] = cups[dest]
+		cups[dest] = pick1
 	}
-	for (i = 0; i < NF; ++i) {
-		if (cups[i] == 1) {
-			for (j = 1; j < NF; ++j) {
-				printf "%d", cups[(i + j) % NF]
-			}
-			printf "\n"
-			break
-		}
+	current = cups[1]
+	for (i = 2; i <= NF; ++i) {
+		printf "%s", current
+		current = cups[current]
 	}
+	printf "\n"
 }
