@@ -1,0 +1,24 @@
+#!/usr/bin/awk -f
+{
+	subject = 7
+	value = 1
+	for (i = 1; ; ++i) {
+		value *= subject
+		value %= 20201227
+		if (value == $1) {
+			public_key[NR] = $1
+			loop_size[NR] = i
+			break
+		}
+	}
+}
+END {
+	subject = public_key[2]
+	value = 1
+	loops = loop_size[1]
+	for (j = 1; j <= loops; ++j) {
+		value *= subject
+		value %= 20201227
+	}
+	printf "%.0f\n", value
+}
