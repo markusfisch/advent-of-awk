@@ -4,7 +4,7 @@
 
 #define NCUPS 1000000
 
-/* the index is the number, the value points to the next index */
+/* the array index is the number, the value points to the next index */
 int cups[NCUPS];
 
 int find_dest(int value, int pick1, int pick2, int pick3) {
@@ -35,6 +35,7 @@ int setup(char *input) {
 	for (int i = 0; i < NCUPS; ++i) {
 		cups[i] = i + 1;
 	}
+	/* this is a race car - put if off track and it breaks ;) */
 	#define INPUT(n) input[n] - 49
 	int last = strlen(input) - 1;
 	for (int i = 0; i < last; ++i) {
