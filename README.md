@@ -37,7 +37,7 @@
 
 To run the scripts you need some flavour of `AWK`, of course.
 
-To re-generate (or verify) the `solutions` file, you also need
+To re-generate (or verify) the `results` file, you also need
 [bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell)) and
 [diff](https://en.wikipedia.org/wiki/Diff).
 
@@ -66,10 +66,6 @@ do:
 
 This will print nothing if all the solutions are correct.
 Otherwise the differences will be shown.
-
-To update the `solutions` file after adding a new solution, you'd do:
-
-	$ ./test save
 
 [1]: https://adventofcode.com/2020/day/1
 [2]: https://adventofcode.com/2020/day/2

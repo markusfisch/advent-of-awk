@@ -15,9 +15,9 @@ report() {
 	done
 }
 check() {
-	report | diff solutions -
+	report | diff results -
 }
 save() {
-	report > solutions
+	report > results
 }
 "${@:-check}"
