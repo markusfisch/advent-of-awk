@@ -17,12 +17,8 @@ function decode(c, i) {
 		}
 	}
 	id = row * 8 + col
-	if (id > max) {
-		max = id
-	}
-	if (id < min) {
-		min = id
-	}
+	if (id > max) max = id
+	if (id < min) min = id
 	ids[id] = 1
 }
 END {

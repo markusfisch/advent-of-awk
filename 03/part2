@@ -12,9 +12,7 @@ END {
 		line = 0
 		while ((getline < FILENAME) > 0) {
 			if (line++ % down == 0) {
-				if ($(1 + x % NF) == "#") {
-					++trees
-				}
+				if ($(1 + x % NF) == "#") ++trees
 				x += right
 			}
 		}
@@ -22,5 +20,4 @@ END {
 		sum *= trees
 	}
 	printf "%0.f\n", sum
-	exit
 }

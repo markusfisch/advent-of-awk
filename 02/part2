@@ -3,7 +3,7 @@ BEGIN {
 	FS = "[ :-]"
 }
 {
-	s = (substr($5, $1, 1) substr($5, $2, 1))
+	s = substr($5, $1, 1) substr($5, $2, 1)
 	if (gsub($3, "", s) == 1) {
 		++valid
 	}

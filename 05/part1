@@ -16,9 +16,7 @@ function decode(c, i) {
 		}
 	}
 	id = row * 8 + col
-	if (id > max) {
-		max = id
-	}
+	if (id > max) max = id
 }
 END {
 	print max

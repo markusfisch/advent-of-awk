@@ -3,9 +3,7 @@ BEGIN {
 	FS = ""
 }
 {
-	if ($(1 + x % NF) == "#") {
-		++trees
-	}
+	if ($(1 + x % NF) == "#") ++trees
 	x += 3
 }
 END {

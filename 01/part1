@@ -1,13 +1,12 @@
 #!/usr/bin/awk -f
-NR==FNR {
+{
 	arr[NR] = $1
-	next
 }
 END {
 	for (a in arr) {
 		for (b in arr) {
 			if (arr[a] + arr[b] == 2020) {
-				print arr[a]*arr[b]
+				print arr[a] * arr[b]
 				exit
 			}
 		}
