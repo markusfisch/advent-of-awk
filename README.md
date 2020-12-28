@@ -31,7 +31,7 @@
 | [Day 22: Crab Combat][22]             | [Part 1](22/part1) | [Part 2](22/part2) |
 | [Day 23: Crab Cups][23]               | [Part 1](23/part1) | [Part 2](23/part2) |
 | [Day 24: Lobby Layout][24]            | [Part 1](24/part1) | [Part 2](24/part2) |
-| [Day 25: Combo Breaker][25]           | [Part 1](25/part1) | [Part 2](25/part2) |
+| [Day 25: Combo Breaker][25]           | [Part 1](25/part1) |                    |
 
 ## Requirements
 
